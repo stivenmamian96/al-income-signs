@@ -45,6 +45,7 @@ export const SaveSignatureUseCase = async (params: SaveSignatureUseCaseDTO): Pro
             companyId: params.idCompany.toString(),
             signatureKey: signatureKey.toString(),
             signatureName: params.signatureName,
+            base64Image: base64Data,
             bucketKey: bucketParams.Key,
             createdAt: creationDate,
         }
@@ -61,6 +62,7 @@ export const SaveSignatureUseCase = async (params: SaveSignatureUseCaseDTO): Pro
         companyId: params.idCompany,
         signatureKey: signatureKey.toString(),
         signatureName: params.signatureName,
+        base64Image: base64Data,
         bucketKey: bucketParams.Key,
         createdAt: creationDate,
         retrieveUrl: imageUrl,

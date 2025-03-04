@@ -29,7 +29,8 @@ export const GetSignsByCompanyUseCase = async (params: GetSignsByCompanyUseCaseD
                 signatureName: signature.signatureName,
                 createdAt: signature.createdAt,
                 companyId: signature.companyId,
-                bucketKey: signature.bucketKey
+                bucketKey: signature.bucketKey,
+                base64Image: signature.base64Image
             };
             if (params.enableRetrieveUrl) {
                 let currentDate = new Date();
@@ -81,6 +82,7 @@ export const GetSignByCompanyAndSignatureKeyUseCase = async (params: GetSignsByC
         signatureName: signature.signatureName,
         bucketKey: signature.bucketKey,
         createdAt: signature.createdAt,
+        base64Image: signature.base64Image
     }
 
     if (params.enableRetrieveUrl) {
