@@ -7,6 +7,8 @@
             "name": "Serverless offline debug",
             "runtimeExecutable": "/opt/homebrew/bin/npx",
             "runtimeArgs": [
+                "nodemon",
+                "--exec",
                 "serverless",
                 "offline",
                 "start",

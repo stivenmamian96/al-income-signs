@@ -21,6 +21,7 @@ export class _EnvLoader
     public static loadEnviromentVars(): IEnvironmentConfig
     {
         const args = process.argv.slice(2);
+        const command = args.find(arg => !arg.startsWith('--')) || '';
         const stage = args.find((arg) => arg.startsWith('--stage='))?.split('=')[1];
         const profile = args.find((arg) => arg.startsWith('--aws-profile='))?.split('=')[1];
 
@@ -30,18 +31,24 @@ export class _EnvLoader
             production: ProductionConfig
         };
 
-        if (!stage || !avaiableStages[stage]) {
+        let selectedStage = avaiableStages[stage] ?? null;
+        const commandsWithStage = ['deploy', 'remove'];
+
+        if (!selectedStage && !commandsWithStage.includes(command)) {
+            selectedStage = avaiableStages['development'];
+        }
+
+        if (!selectedStage) {
             const avaiableStagesStr = Object.keys(avaiableStages).join(' | ');
             throw new Error(`Invalid stage using serverless\n\nUse --stage=[${avaiableStagesStr}]`);
         }
 
-        const selectedStage = avaiableStages[stage];
         if (profile && !selectedStage.Environment.AWS_DEPLOYMENT_PROFILE) {
             selectedStage.Environment.AWS_DEPLOYMENT_PROFILE = profile;
         }
 
-        if (stage !== 'development') {
-            const ssmToken = "${ssm:/" + selectedStage.Environment.SECURITY_TOKEN + "}";
+        if (stage == 'production') {
+            const ssmToken = "${ssm:" + selectedStage.Environment.SECURITY_TOKEN + "}";
             selectedStage.Environment.SECURITY_TOKEN = ssmToken;
         }
 

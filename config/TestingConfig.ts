@@ -1,18 +1,17 @@
 import { IEnvironmentConfig } from "./interface/IEnvironmentConfig"
 
 const Environment: IEnvironmentConfig['Environment'] = {
-    AWS_SIGNATURES_BUCKET_NAME: 'alegrasignsimages',
-    AWS_SIGNATURES_DATABASE_TABLE: 'alegra-income-signs',
-    AWS_LOCAL_REGION: 'us-east-1',
+    AWS_SIGNATURES_BUCKET_NAME: 'al-income-signatures',
+    AWS_SIGNATURES_DATABASE_TABLE: 'al-income-signatures',
     AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
-    SECURITY_TOKEN: "income-signs/security-token"
+    SECURITY_TOKEN: 'pqnJP4FjLrFUXGAfqgnSBNF6waHBWiBNoA5XM3LJDyqnzHpR1Vr5WiCM6G17dXUU'
 }
 
 export const TestingConfig: IEnvironmentConfig = 
 {
     Serverless: {
-        SIGNATURES_DATABASE_ARN: 'arn:aws:dynamodb:us-east-1:176986283156:table/alegra-income-signatures',
-        SIGNATURES_BUCKET_ARN: 'arn:aws:s3:::alegrasignsimages',
+        SIGNATURES_DATABASE_ARN: `arn:aws:dynamodb:us-east-1:647089136475:table/${Environment.AWS_SIGNATURES_DATABASE_TABLE}`,
+        SIGNATURES_BUCKET_ARN: `arn:aws:s3:::${Environment.AWS_SIGNATURES_BUCKET_NAME}`,
     },
     Environment
 }

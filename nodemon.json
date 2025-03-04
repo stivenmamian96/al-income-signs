@@ -1,0 +1,11 @@
+{
+    "watch": [
+        "src/",
+        "serverless.ts"
+    ],
+    "ext": ".ts",
+    "ignore": [
+        ".git",
+        "node_modules/"
+    ]
+}

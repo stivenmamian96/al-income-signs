@@ -16,7 +16,7 @@ export default
         {
             http: {
                 method: 'get',
-                path: '/api/v1/signsByCompany',
+                path: '/api/v1/signature',
                 request: {
                     parameters: {
                         querystrings: {

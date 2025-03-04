@@ -1,5 +1,3 @@
-import type { AWS } from '@serverless/typescript';
-
 import { DevelopmentConfig } from './config/DevelopmentConfig';
 import { TestingConfig } from './config/TestingConfig';
 import { ProductionConfig } from './config/ProductionConfig';
@@ -9,13 +7,13 @@ import SignaturesByCompany from '@functions/SignaturesByCompany';
 
 const config = _EnvLoader.loadEnviromentVars();
 
-const serverlessConfiguration: AWS = {
+const serverlessConfiguration = {
     service: 'al-income-signatures',
     frameworkVersion: '4',
     plugins: ['serverless-offline'],
     provider: {
         name: 'aws',
-        runtime: 'nodejs18.x',
+        runtime: 'nodejs20.x',
         profile: config.Environment.AWS_DEPLOYMENT_PROFILE,
         apiGateway: {
             minimumCompressionSize: 1024,
@@ -41,17 +39,18 @@ const serverlessConfiguration: AWS = {
     },
     functions: { SaveSignature, SignaturesByCompany },
     package: { individually: true },
-    custom: {
+    build: {
         esbuild: {
             bundle: true,
             minify: false,
             sourcemap: true,
             exclude: ['aws-sdk'],
-            target: 'node18',
+            target: 'node20',
             define: { 'require.resolve': undefined },
-            platform: 'node',
-            concurrency: 10,
-        },
+            platform: 'node'
+        }
+    },
+    custom: {
         testing: TestingConfig,
         production: ProductionConfig,
         development: DevelopmentConfig,

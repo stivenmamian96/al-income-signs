@@ -11,27 +11,40 @@ import { SaveSignatureUseCaseDTO } from "../interface/SaveSignatureUseCaseDTO";
 import { DynamoDbClient } from "@functions/_shared/aws/DynamoDbClient";
 import { DynamoDB, S3 } from "aws-sdk";
 import { SignatureObject } from "@functions/_shared/interface/Sign";
+import { AllowedImageExtensions } from "../config/AllowedImageExtensions";
 
 export const SaveSignatureUseCase = async (params: SaveSignatureUseCaseDTO): Promise<SignatureObject> => 
 {
-    const imageExtension = params.contentType.split('/')[1];
+    const match = params.base64Image.match(/^data:image\/(png|jpg|jpeg);base64,/);
+    if (!match) {
+        throw new Error('Formato de imagen Base64 no válido');
+    }
+
+    const imageExtension = match[1];
+    const imageType = `image/${imageExtension}`;
+    if (!Object.values(AllowedImageExtensions).includes(imageType)) {
+        throw new Error('Tipo de imagen no permitido');
+    }
+    const signatureKey = (new Date().getTime());
+    const base64Data = params.base64Image.replace(/^data:image\/(png|jpg|jpeg);base64,/, '');
+
     const bucketName = process.env.AWS_SIGNATURES_BUCKET_NAME;
     const creationDate = new Date().toISOString();
     const maxUrlExpiration = 1800;
 
     const bucketParams: S3.PutObjectRequest = {
         Bucket: bucketName,
-        Key: `${params.keyCountry}/${params.idCompany}/${params.signatureKey}.${imageExtension}`,
-        Body: Buffer.from(params.base64Image, 'base64'),
-        ContentType: params.contentType
-    };
+        Key: `${params.idCompany}/${signatureKey}.${imageExtension}`,
+        Body: Buffer.from(base64Data, 'base64'),
+        ContentType: imageType
+    }
 
     const databaseParams: DynamoDB.DocumentClient.PutItemInput = {
         TableName: process.env.AWS_SIGNATURES_DATABASE_TABLE,
         Item: {
             companyId: params.idCompany.toString(),
-            signatureKey: params.signatureKey,
-            keyCountry: params.keyCountry,
+            signatureKey: signatureKey.toString(),
+            signatureName: params.signatureName,
             bucketKey: bucketParams.Key,
             createdAt: creationDate,
         }
@@ -45,9 +58,9 @@ export const SaveSignatureUseCase = async (params: SaveSignatureUseCaseDTO): Pro
     await dynamoDb.putItem(databaseParams);
 
     return {
-        keyCountry: params.keyCountry,
         companyId: params.idCompany,
-        signatureKey: params.signatureKey,
+        signatureKey: signatureKey.toString(),
+        signatureName: params.signatureName,
         bucketKey: bucketParams.Key,
         createdAt: creationDate,
         retrieveUrl: imageUrl,

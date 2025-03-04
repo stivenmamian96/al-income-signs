@@ -17,7 +17,7 @@ export default
         {
             http: {
                 method: 'post',
-                path: '/api/v1/saveSign',
+                path: '/api/v1/signature',
                 request: {
                     schemas: {
                         'application/json': EndpointSchema,

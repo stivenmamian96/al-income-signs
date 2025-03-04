@@ -8,25 +8,27 @@
  */
 
 import type { ValidatedEventAPIGatewayProxyEvent } from '@libs/api-gateway';
-import { formatJSONResponse } from '@libs/api-gateway';
+import { badRequestResponse, formatJSONResponse } from '@libs/api-gateway';
 import { middyfy } from '@libs/lambda';
 import schema from './config/EndpointSchema';
 import { SaveSignatureUseCase } from './src/SaveSignatureUseCase';
 
 const saveSign: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => 
 {
-    const signData = await SaveSignatureUseCase({
-        base64Image: event.body.image,
-        contentType: event.body.imageType,
-        idCompany: event.body.idCompany,
-        keyCountry: event.body.keyCountry,
-        signatureKey: event.body.signatureKey
-    });
+    try {
+        const signData = await SaveSignatureUseCase({
+            idCompany: event.body.idCompany,
+            base64Image: event.body.image,
+            signatureName: event.body.signatureName
+        });
 
-    return formatJSONResponse({
-        message: 'Sign saved successfully',
-        signData
-    });
+        return formatJSONResponse({
+            message: 'Sign saved successfully',
+            signData
+        });
+    } catch (error) {
+        return badRequestResponse(error.message);
+    }
 };
 
 export const main = middyfy(saveSign);

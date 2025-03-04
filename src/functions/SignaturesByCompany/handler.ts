@@ -10,25 +10,41 @@ import type { ValidatedEventAPIGatewayProxyEvent } from '@libs/api-gateway';
 import { badRequestResponse, formatJSONResponse } from '@libs/api-gateway';
 import { middyfy } from '@libs/lambda';
 import schema from './config/EndpointSchema';
-import { GetSignsByCompanyUseCase } from './src/GetSignsByCompanyUseCase';
+import { GetSignByCompanyAndSignatureKeyUseCase, GetSignsByCompanyUseCase } from './src/GetSignsByCompanyUseCase';
 
 const signsByCompany: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => 
 {
-    const { companyId, enableRetrieveUrl } = event.queryStringParameters || {};
-    if (!companyId) {
-        return badRequestResponse('Missing required companyId parameter');
+    try {
+        const { companyId, signatureKey, enableRetrieveUrl } = event.queryStringParameters || {};
+        if (!companyId) {
+            return badRequestResponse('Missing required companyId parameter');
+        }
+
+        const retrieveUrlEnabled = enableRetrieveUrl === 'true';
+
+        if (signatureKey) {
+            const signature = await GetSignByCompanyAndSignatureKeyUseCase({
+                companyId: companyId,
+                signatureKey: signatureKey,
+                enableRetrieveUrl: retrieveUrlEnabled
+            });
+
+            return formatJSONResponse({
+                ...signature
+            });
+        }
+        const signsResponse = await GetSignsByCompanyUseCase({
+            companyId: companyId,
+            enableRetrieveUrl: retrieveUrlEnabled
+        });
+
+        return formatJSONResponse({
+            statusCode: 200,
+            body: signsResponse
+        });
+    } catch (error) {
+        return badRequestResponse(error.message);
     }
-
-    const retrieveUrlEnabled = enableRetrieveUrl === 'true';
-    const signsResponse = await GetSignsByCompanyUseCase({
-        companyId: companyId,
-        enableRetrieveUrl: retrieveUrlEnabled
-    });
-
-    return formatJSONResponse({
-        statusCode: 200,
-        body: signsResponse
-    });
 };
 
 export const main = middyfy(signsByCompany);

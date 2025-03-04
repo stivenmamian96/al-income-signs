@@ -8,20 +8,13 @@
  * @license   Proprietary/Closed Source Soluciones Alegra S.A.S
  */
 
-import { AllowedImageExtensions } from "./AllowedImageExtensions";
-
 export default 
 {
     type: "object",
     properties: {
         idCompany: { type: ['string', 'integer'] },
-        keyCountry: { type: 'string' },
-        image: { type: 'string' },
-        signatureKey: { type: 'string' },
-        imageType: {
-            type: 'string',
-            enum: AllowedImageExtensions
-        }
+        signatureName: { type: 'string' },
+        image: { type: 'string' }
     },
-    required: ['idCompany', 'keyCountry', 'image', 'imageType', 'signatureKey'],
+    required: ['idCompany', 'signatureName', 'image'],
 } as const;
