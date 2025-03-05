@@ -18,11 +18,19 @@ export default
             http: {
                 method: 'post',
                 path: '/api/v1/signature',
+                cors: true,
                 request: {
                     schemas: {
                         'application/json': EndpointSchema,
                     },
                 },
+            },
+        },
+        {
+            http: {
+                method: 'options',
+                path: '/api/v1/signature',
+                cors: true,
             },
         },
     ],
