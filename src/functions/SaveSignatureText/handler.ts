@@ -10,15 +10,22 @@
 import type { ValidatedEventAPIGatewayProxyEvent } from '@libs/api-gateway';
 import { badRequestResponse, formatJSONResponse } from '@libs/api-gateway';
 import { middyfy } from '@libs/lambda';
-import schema from './config/EndpointSchema';
+import { CreateSignatureFromTextUseCase } from './src/CreateSignatureFromTextUseCase';
+import EndpointSchema from './config/EndpointSchema';
 import { SaveSignatureUseCase } from '@shared/useCase/SaveSignatureUseCase/SaveSignatureUseCase';
 
-const saveSign: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => 
+const saveSign: ValidatedEventAPIGatewayProxyEvent<typeof EndpointSchema> = async (event) => 
 {
     try {
+        const signatureBase64 = await CreateSignatureFromTextUseCase({
+            signatureFontSize: event.body.fontSize,
+            signatureFontFamily: event.body.fontFamily,
+            signatureText: event.body.content
+        });
+
         const signData = await SaveSignatureUseCase({
             idCompany: event.body.idCompany,
-            base64Image: event.body.image,
+            base64Image: signatureBase64,
             signatureName: event.body.signatureName
         });
 
@@ -26,6 +33,7 @@ const saveSign: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event
             message: 'Sign saved successfully',
             signData
         });
+        
     } catch (error) {
         return badRequestResponse(error.message);
     }

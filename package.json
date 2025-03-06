@@ -12,7 +12,8 @@
   "dependencies": {
     "@middy/core": "^3.4.0",
     "@middy/http-json-body-parser": "^3.4.0",
-    "aws-sdk": "^2.1692.0"
+    "aws-sdk": "^2.1692.0",
+    "canvas": "^3.1.0"
   },
   "devDependencies": {
     "@serverless/typescript": "^3.0.0",

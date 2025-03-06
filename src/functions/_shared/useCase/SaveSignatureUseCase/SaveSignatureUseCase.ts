@@ -6,12 +6,12 @@
  * @license   Proprietary/Closed Source Soluciones Alegra S.A.S
  */
 
-import { S3Client } from "@functions/_shared/aws/S3Client";
-import { SaveSignatureUseCaseDTO } from "../interface/SaveSignatureUseCaseDTO";
-import { DynamoDbClient } from "@functions/_shared/aws/DynamoDbClient";
+import { S3Client } from "@shared/aws/S3Client";
+import { SaveSignatureUseCaseDTO } from "./SaveSignatureUseCaseDTO";
+import { DynamoDbClient } from "@shared/aws/DynamoDbClient";
 import { DynamoDB, S3 } from "aws-sdk";
-import { SignatureObject } from "@functions/_shared/interface/Sign";
-import { AllowedImageExtensions } from "../config/AllowedImageExtensions";
+import { SignatureObject } from "@shared/interface/Sign";
+import { AllowedImageExtensions } from "@shared/interface/AllowedImageExtensions";
 
 export const SaveSignatureUseCase = async (params: SaveSignatureUseCaseDTO): Promise<SignatureObject> => 
 {

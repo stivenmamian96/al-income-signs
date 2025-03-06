@@ -4,7 +4,7 @@ import { ProductionConfig } from './config/ProductionConfig';
 import { _EnvLoader } from './config/_EnvLoader';
 import SaveSignature from '@functions/SaveSignature';
 import SignaturesByCompany from '@functions/SignaturesByCompany';
-
+import SaveSignatureText from '@functions/SaveSignatureText';
 const config = _EnvLoader.loadEnviromentVars();
 
 const serverlessConfiguration = {
@@ -37,7 +37,7 @@ const serverlessConfiguration = {
         },
         environment: config.Environment,
     },
-    functions: { SaveSignature, SignaturesByCompany },
+    functions: { SaveSignature, SignaturesByCompany, SaveSignatureText },
     package: { individually: true },
     build: {
         esbuild: {
