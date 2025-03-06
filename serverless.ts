@@ -37,17 +37,32 @@ const serverlessConfiguration = {
         },
         environment: config.Environment,
     },
-    functions: { SaveSignature, SignaturesByCompany, SaveSignatureText },
-    package: { individually: true },
+    functions: { 
+        SaveSignature, 
+        SignaturesByCompany, 
+        SaveSignatureText: {
+            ...SaveSignatureText,
+            layers: [
+                'arn:aws:lambda:us-east-1:647089136475:layer:canvas-nodejs:1'
+            ],
+        }
+    },
+    package: { 
+        individually: true,
+        patterns: [
+            'src/functions/SaveSignatureText/resources/fonts/**'
+        ]
+    },
     build: {
         esbuild: {
             bundle: true,
             minify: false,
             sourcemap: true,
-            exclude: ['aws-sdk'],
+            exclude: ['aws-sdk', 'canvas', '@napi-rs/canvas'],
             target: 'node20',
             define: { 'require.resolve': undefined },
-            platform: 'node'
+            platform: 'node',
+            external: ['canvas']
         }
     },
     custom: {
