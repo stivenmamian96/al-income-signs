@@ -16,7 +16,16 @@ export const CreateSignatureFromTextUseCase = async (params: SignatureTextObject
     context.fillRect(0, 0, width, height);
 
     context.fillStyle = 'black';
-    context.font = params.signatureFontSize + 'px ' + params.signatureFontFamily;
+    let fontString = '';
+    if (params.isBold) {
+        // fontString += 'bold ';
+    }
+    if (params.isItalic) {
+        // fontString += 'italic ';
+    }
+    fontString += params.signatureFontSize + 'px ' + params.signatureFontFamily;
+    context.font = fontString;
+
     context.textAlign = 'center';
     context.textBaseline = 'middle';
 

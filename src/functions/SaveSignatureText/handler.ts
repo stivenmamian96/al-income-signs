@@ -20,7 +20,10 @@ const saveSign: ValidatedEventAPIGatewayProxyEvent<typeof EndpointSchema> = asyn
         const signatureBase64 = await CreateSignatureFromTextUseCase({
             signatureFontSize: event.body.fontSize,
             signatureFontFamily: event.body.fontFamily,
-            signatureText: event.body.content
+            signatureText: event.body.content,
+            isBold: event.body.isBold,
+            isItalic: event.body.isItalic,
+            isUnderlined: event.body.isUnderlined
         });
 
         const signData = await SaveSignatureUseCase({
