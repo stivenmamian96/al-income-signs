@@ -12,6 +12,7 @@ export const TestingConfig: IEnvironmentConfig =
     Serverless: {
         SIGNATURES_DATABASE_ARN: `arn:aws:dynamodb:us-east-1:647089136475:table/${Environment.AWS_SIGNATURES_DATABASE_TABLE}`,
         SIGNATURES_BUCKET_ARN: `arn:aws:s3:::${Environment.AWS_SIGNATURES_BUCKET_NAME}`,
+        LAMBDA_AUTHORIZER_ARN: 'arn:aws:lambda:us-east-1:812368164925:function:alegra-auth-test-authorizer'
     },
     Environment
 }

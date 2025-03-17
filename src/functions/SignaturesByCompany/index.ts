@@ -8,22 +8,22 @@
 
 import { handlerPath } from '@libs/handler-resolver';
 
+const isLocalServerless = process.env.LOCAL_SERVERLESS === 'true';
+
 export default 
 {
     handler: `${handlerPath(__dirname)}/handler.main`,
     timeout: 30,
     events: [
         {
-            http: {
+            httpApi: {
                 method: 'get',
                 path: '/api/v1/signature',
-                request: {
-                    parameters: {
-                        querystrings: {
-                            companyId: true,
-                        },
-                    },
-                },
+                ... (!isLocalServerless && {
+                    authorizer: {
+                        name: 'lambdaAuthorizer'
+                    }
+                })
             },
         },
     ],

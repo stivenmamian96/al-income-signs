@@ -5,9 +5,9 @@
  * @copyright 2024 Soluciones Alegra S.A.S
  * @license   Proprietary/Closed Source Soluciones Alegra S.A.S
  */
-
-import EndpointSchema from './config/EndpointSchema';
 import { handlerPath } from '@libs/handler-resolver';
+
+const isLocalServerless = process.env.LOCAL_SERVERLESS === 'true';
 
 export default 
 {
@@ -15,23 +15,15 @@ export default
     timeout: 30,
     events: [
         {
-            http: {
+            httpApi: {
                 method: 'post',
                 path: '/api/v1/signature',
-                cors: true,
-                request: {
-                    schemas: {
-                        'application/json': EndpointSchema,
-                    },
-                },
+                ... (!isLocalServerless && {
+                    authorizer: {
+                        name: 'lambdaAuthorizer'
+                    }
+                })
             },
-        },
-        {
-            http: {
-                method: 'options',
-                path: '/api/v1/signature',
-                cors: true,
-            },
-        },
+        }
     ],
 };

@@ -7,7 +7,8 @@
  */
 
 import { handlerPath } from '@libs/handler-resolver';
-import EndpointSchema from './config/EndpointSchema';
+
+const isLocalServerless = process.env.LOCAL_SERVERLESS === 'true';
 
 export default 
 {
@@ -15,23 +16,15 @@ export default
     timeout: 30,
     events: [
         {
-            http: {
+            httpApi: {
                 method: 'post',
                 path: '/api/v1/signature-text',
-                cors: true,
-                request: {
-                    schemas: {
-                        'application/json': EndpointSchema,
-                    },
-                },
+                ... (!isLocalServerless && {
+                    authorizer: {
+                        name: 'lambdaAuthorizer'
+                    }
+                })
             },
-        },
-        {
-            http: {
-                method: 'options',
-                path: '/api/v1/signature-text',
-                cors: true,
-            },
-        },
+        }
     ],
 };

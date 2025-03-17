@@ -2,7 +2,8 @@ export interface IEnvironmentConfig
 {
     Serverless: {
         SIGNATURES_DATABASE_ARN: string,
-        SIGNATURES_BUCKET_ARN: string
+        SIGNATURES_BUCKET_ARN: string,
+        LAMBDA_AUTHORIZER_ARN: string,
     },
     Environment: {
         AWS_SIGNATURES_BUCKET_NAME: string,

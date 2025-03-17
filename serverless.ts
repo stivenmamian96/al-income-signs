@@ -8,16 +8,37 @@ import SaveSignatureText from '@functions/SaveSignatureText';
 const config = _EnvLoader.loadEnviromentVars();
 
 const serverlessConfiguration = {
-    service: 'al-income-signatures',
+    service: 'al-pdf-signatures-api',
     frameworkVersion: '4',
     plugins: ['serverless-offline'],
     provider: {
         name: 'aws',
         runtime: 'nodejs20.x',
         profile: config.Environment.AWS_DEPLOYMENT_PROFILE,
-        apiGateway: {
-            minimumCompressionSize: 1024,
-            shouldStartNameWithService: true,
+        httpApi: {
+            cors: {
+                allowedOrigins: ['*'],
+                allowedHeaders: [
+                    'Content-Type',
+                    'Authorization',
+                    'X-Api-Key',
+                    'X-Amz-Date',
+                    'X-Amz-Security-Token'
+                ],
+                allowedMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+            },
+            authorizers: {
+                lambdaAuthorizer: {
+                    type: 'request',
+                    name: 'lambdaAuthorizer',
+                    functionArn: config.Serverless.LAMBDA_AUTHORIZER_ARN,
+                    resultTtlInSeconds: 30,
+                    enableSimpleResponses: false,
+                    payloadVersion: '2.0',
+                    identitySource: ["$request.header.Authorization"],
+                    managedExternally: true
+                }
+            }
         },
         iam: {
             role: {
