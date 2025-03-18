@@ -4,7 +4,6 @@ const Environment: IEnvironmentConfig['Environment'] = {
     AWS_SIGNATURES_BUCKET_NAME: 'al-income-signatures',
     AWS_SIGNATURES_DATABASE_TABLE: 'al-income-signatures',
     AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
-    SECURITY_TOKEN: 'pqnJP4FjLrFUXGAfqgnSBNF6waHBWiBNoA5XM3LJDyqnzHpR1Vr5WiCM6G17dXUU'
 }
 
 export const TestingConfig: IEnvironmentConfig = 

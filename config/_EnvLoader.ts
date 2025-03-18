@@ -47,11 +47,6 @@ export class _EnvLoader
             selectedStage.Environment.AWS_DEPLOYMENT_PROFILE = profile;
         }
 
-        if (stage == 'production') {
-            const ssmToken = "${ssm:" + selectedStage.Environment.SECURITY_TOKEN + "}";
-            selectedStage.Environment.SECURITY_TOKEN = ssmToken;
-        }
-
         return selectedStage;
     }
 

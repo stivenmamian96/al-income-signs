@@ -12,6 +12,5 @@ export interface IEnvironmentConfig
         AWS_NODEJS_CONNECTION_REUSE_ENABLED?: string,
         AWS_DEPLOYMENT_PROFILE?: string,
         NODE_OPTIONS?: string,
-        SECURITY_TOKEN: string,
     }
 }

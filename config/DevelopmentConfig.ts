@@ -11,7 +11,6 @@ const Environment: IEnvironmentConfig['Environment'] = {
     AWS_SIGNATURES_DATABASE_TABLE: process.env.SIGNS_DATABASE_TABLE,
     AWS_DEPLOYMENT_PROFILE: process.env.AWS_PROFILE,
     AWS_LOCAL_REGION: process.env.AWS_REGION,
-    SECURITY_TOKEN: process.env.SECURITY_TOKEN,
 }
 
 export const DevelopmentConfig: IEnvironmentConfig = 
