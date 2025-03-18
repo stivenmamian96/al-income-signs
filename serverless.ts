@@ -5,9 +5,11 @@ import { _EnvLoader } from './config/_EnvLoader';
 import SaveSignature from '@functions/SaveSignature';
 import SignaturesByCompany from '@functions/SignaturesByCompany';
 import SaveSignatureText from '@functions/SaveSignatureText';
+import { IServerlessConfig } from './config/IServerlessTypes';
+
 const config = _EnvLoader.loadEnviromentVars();
 
-const serverlessConfiguration = {
+const serverlessConfiguration: IServerlessConfig = {
     service: 'al-pdf-signatures-api',
     frameworkVersion: '4',
     plugins: ['serverless-offline'],
@@ -25,7 +27,7 @@ const serverlessConfiguration = {
                     'X-Amz-Date',
                     'X-Amz-Security-Token'
                 ],
-                allowedMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+                allowedMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
             },
             authorizers: {
                 lambdaAuthorizer: {
