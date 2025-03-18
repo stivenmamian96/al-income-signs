@@ -18,7 +18,8 @@ export const DevelopmentConfig: IEnvironmentConfig =
     Serverless: {
         SIGNATURES_DATABASE_ARN: 'arn:aws:dynamodb:us-east-1:176986283156:table/alegra-income-signs',
         SIGNATURES_BUCKET_ARN: 'arn:aws:s3:::alegrasignsimages',
-        LAMBDA_AUTHORIZER_ARN: process.env.LAMBDA_AUTHORIZER_ARN ?? ''
+        LAMBDA_AUTHORIZER_ARN: process.env.LAMBDA_AUTHORIZER_ARN ?? '',
+        CANVAS_LAYER_ARN: process.env.CANVAS_LAYER_ARN ?? '',
     },
     Environment
 }

@@ -11,7 +11,8 @@ export const ProductionConfig: IEnvironmentConfig =
     Serverless: {
         SIGNATURES_DATABASE_ARN: `arn:aws:dynamodb:us-east-1:104136624701:table/${Environment.AWS_SIGNATURES_DATABASE_TABLE}`,
         SIGNATURES_BUCKET_ARN: `arn:aws:s3:::${Environment.AWS_SIGNATURES_BUCKET_NAME}`,
-        LAMBDA_AUTHORIZER_ARN: 'arn:aws:lambda:us-east-1:857745039400:function:alegra-auth-prod-authorizer'
+        LAMBDA_AUTHORIZER_ARN: 'arn:aws:lambda:us-east-1:857745039400:function:alegra-auth-prod-authorizer',
+        CANVAS_LAYER_ARN: 'arn:aws:lambda:us-east-1:104136624701:layer:canvas-nodejs:1'
     },
     Environment
 }
