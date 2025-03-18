@@ -66,7 +66,7 @@ const serverlessConfiguration: IServerlessConfig = {
         SaveSignatureText: {
             ...SaveSignatureText,
             layers: [
-                'arn:aws:lambda:us-east-1:647089136475:layer:canvas-nodejs:1'
+                config.Serverless.CANVAS_LAYER_ARN
             ],
         }
     },
