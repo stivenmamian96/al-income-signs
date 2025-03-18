@@ -13,12 +13,13 @@ const isLocalServerless = process.env.LOCAL_SERVERLESS === 'true';
 export default 
 {
     handler: `${handlerPath(__dirname)}/handler.main`,
-    timeout: 30,
+    timeout: 10,
     events: [
         {
             httpApi: {
                 method: 'post',
                 path: '/api/v1/signature-text',
+                cors: true,
                 ... (!isLocalServerless && {
                     authorizer: {
                         name: 'lambdaAuthorizer'
