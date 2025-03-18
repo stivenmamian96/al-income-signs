@@ -19,7 +19,6 @@ export default
             httpApi: {
                 method: 'post',
                 path: '/api/v1/signature-text',
-                cors: true,
                 ... (!isLocalServerless && {
                     authorizer: {
                         name: 'lambdaAuthorizer'
