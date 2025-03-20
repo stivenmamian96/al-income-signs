@@ -12,7 +12,14 @@ export const TestingConfig: IEnvironmentConfig =
         SIGNATURES_DATABASE_ARN: `arn:aws:dynamodb:us-east-1:647089136475:table/${Environment.AWS_SIGNATURES_DATABASE_TABLE}`,
         SIGNATURES_BUCKET_ARN: `arn:aws:s3:::${Environment.AWS_SIGNATURES_BUCKET_NAME}`,
         LAMBDA_AUTHORIZER_ARN: 'arn:aws:lambda:us-east-1:812368164925:function:alegra-auth-test-authorizer',
-        CANVAS_LAYER_ARN: 'arn:aws:lambda:us-east-1:647089136475:layer:canvas-nodejs:1'
+        CANVAS_LAYER_ARN: 'arn:aws:lambda:us-east-1:647089136475:layer:canvas-nodejs:1',
+        CORS_CONFIG: {
+            ALLOWED_ORIGINS: ['*'],
+            ALLOWED_HEADERS: ['*'],
+            ALLOWED_METHODS: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+            ALLOW_CREDENTIALS: false,
+            EXPOSED_RESPONSE_HEADERS: [],
+        }
     },
     Environment
 }
