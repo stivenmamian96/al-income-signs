@@ -19,15 +19,11 @@ const serverlessConfiguration: IServerlessConfig = {
         profile: config.Environment.AWS_DEPLOYMENT_PROFILE,
         httpApi: {
             cors: {
-                allowedOrigins: ['*'],
-                allowedHeaders: [
-                    'Content-Type',
-                    'Authorization',
-                    'X-Api-Key',
-                    'X-Amz-Date',
-                    'X-Amz-Security-Token'
-                ],
-                allowedMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
+                allowedOrigins: config.Serverless.CORS_CONFIG.ALLOWED_ORIGINS,
+                allowedHeaders: config.Serverless.CORS_CONFIG.ALLOWED_HEADERS,
+                allowedMethods: config.Serverless.CORS_CONFIG.ALLOWED_METHODS,
+                allowCredentials: config.Serverless.CORS_CONFIG.ALLOW_CREDENTIALS,
+                exposedResponseHeaders: config.Serverless.CORS_CONFIG.EXPOSED_RESPONSE_HEADERS,
             },
             authorizers: {
                 lambdaAuthorizer: {
