@@ -5,6 +5,13 @@ export interface IEnvironmentConfig
         SIGNATURES_BUCKET_ARN: string,
         LAMBDA_AUTHORIZER_ARN: string,
         CANVAS_LAYER_ARN: string,
+        CORS_CONFIG: {
+            ALLOWED_ORIGINS: string[],
+            ALLOWED_HEADERS: string[],
+            ALLOWED_METHODS: string[],
+            ALLOW_CREDENTIALS: boolean,
+            EXPOSED_RESPONSE_HEADERS: string[],
+        }
     },
     Environment: {
         AWS_SIGNATURES_BUCKET_NAME: string,

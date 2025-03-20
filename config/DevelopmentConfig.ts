@@ -20,6 +20,13 @@ export const DevelopmentConfig: IEnvironmentConfig =
         SIGNATURES_BUCKET_ARN: 'arn:aws:s3:::alegrasignsimages',
         LAMBDA_AUTHORIZER_ARN: process.env.LAMBDA_AUTHORIZER_ARN ?? '',
         CANVAS_LAYER_ARN: process.env.CANVAS_LAYER_ARN ?? '',
+        CORS_CONFIG: {
+            ALLOWED_ORIGINS: ['*'],
+            ALLOWED_HEADERS: ['*'],
+            ALLOWED_METHODS: ['*'],
+            ALLOW_CREDENTIALS: false,
+            EXPOSED_RESPONSE_HEADERS: [],
+        }
     },
     Environment
 }
