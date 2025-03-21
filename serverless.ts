@@ -43,12 +43,12 @@ const serverlessConfiguration: IServerlessConfig = {
                 statements: [
                     {
                         Effect: 'Allow',
-                        Action: ['s3:GetObject', 's3:PutObject'],
+                        Action: ['s3:GetObject', 's3:PutObject', 's3:DeleteObject'],
                         Resource: `${config.Serverless.SIGNATURES_BUCKET_ARN}/*`
                     },
                     {
                         Effect: 'Allow',
-                        Action: ['dynamodb:GetItem', 'dynamodb:PutItem', 'dynamodb:Query'],
+                        Action: ['dynamodb:GetItem', 'dynamodb:PutItem', 'dynamodb:Query', 'dynamodb:DeleteItem'],
                         Resource: `${config.Serverless.SIGNATURES_DATABASE_ARN}`
                     }
                 ]

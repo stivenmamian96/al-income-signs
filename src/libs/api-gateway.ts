@@ -17,6 +17,9 @@ export const formatJSONResponse = (response: Record<string, unknown>) => {
 export const formatObjectResponse = (response: any) => {
     return {
         statusCode: 200,
+        headers: {
+            'Content-Type': 'application/json'
+        },
         body: JSON.stringify(response)
     }
 }
