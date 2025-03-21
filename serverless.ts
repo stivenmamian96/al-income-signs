@@ -75,7 +75,7 @@ const serverlessConfiguration: IServerlessConfig = {
     package: { 
         individually: true,
         patterns: [
-            'src/functions/SaveSignature/resources/fonts/**'
+            'src/functions/_shared/resources/fonts/**'
         ]
     },
     build: {

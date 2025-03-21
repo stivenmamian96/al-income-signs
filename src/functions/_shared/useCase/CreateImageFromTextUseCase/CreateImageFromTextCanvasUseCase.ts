@@ -6,7 +6,7 @@ export class CreateImageFromTextCanvasUseCase implements CreateImageFromTextUseC
 {
     async execute(params: ISignatureText): Promise<string> 
     {
-        const signatureFontFamilyUrl = 'src/functions/SaveSignature/resources/fonts/' + params.fontFamily + '.ttf';
+        const signatureFontFamilyUrl = 'src/functions/_shared/resources/fonts/' + params.fontFamily + '.ttf';
 
         registerFont(signatureFontFamilyUrl, { family: params.fontFamily });
     
