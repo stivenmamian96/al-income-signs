@@ -8,27 +8,31 @@
  */
 
 import type { ValidatedEventAPIGatewayProxyEvent } from '@libs/api-gateway';
-import { badRequestResponse, formatJSONResponse } from '@libs/api-gateway';
+import { badRequestResponse, formatObjectResponse } from '@libs/api-gateway';
 import { middyfy } from '@libs/lambda';
 import schema from './config/EndpointSchema';
-import { SaveSignatureUseCase } from '@shared/useCase/SaveSignatureUseCase/SaveSignatureUseCase';
+import { GetCompanyDataFromRequestUseCaseFactory } from '@functions/_shared/useCase/GetCompanyDataFromRequestUseCase/GetCompanyDataFromRequestUseCaseFactory';
+import { SaveSignatureUseCaseFactory } from '@functions/_shared/useCase/SaveSignatureUseCase/SaveSignatureUseCaseFactory';
+import { ISignatureText } from '@functions/_shared/object/ISignatureText';
+import { ISignatureToApiArray } from '@functions/_shared/object/ISignature';
 
 const saveSign: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => 
 {
     try {
-        const signData = await SaveSignatureUseCase({
-            idCompany: event.body.idCompany,
+        const companyData = GetCompanyDataFromRequestUseCaseFactory.getInstance().execute(event);
+        const signature = await SaveSignatureUseCaseFactory.getInstance().execute({
+            companyId: companyData.id,
             base64Image: event.body.image,
-            signatureName: event.body.signatureName
+            textConfig: event.body.textConfig as ISignatureText,
+            signatureName: event.body.signatureName,
+            enabled: true,
         });
 
-        return formatJSONResponse({
-            message: 'Sign saved successfully',
-            signData
-        });
+        return formatObjectResponse(ISignatureToApiArray(signature));
     } catch (error) {
         return badRequestResponse(error.message);
     }
 };
 
+saveSign.schema = schema;
 export const main = middyfy(saveSign);

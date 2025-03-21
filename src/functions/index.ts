@@ -1,3 +1,4 @@
 export { default as saveSign } from './SaveSignature/index';
-export { default as getSignsByCompany } from './SignaturesByCompany/index';
-export { default as saveSignatureText } from './SaveSignatureText/index';
+export { default as getSignsByCompany } from './GetSignatures/index';
+export { default as updateSign } from './UpdateSignature/index';
+export { default as deleteSign } from './DeleteSignature/index';

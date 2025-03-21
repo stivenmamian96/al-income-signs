@@ -3,10 +3,10 @@ import { TestingConfig } from './config/TestingConfig';
 import { ProductionConfig } from './config/ProductionConfig';
 import { _EnvLoader } from './config/_EnvLoader';
 import SaveSignature from '@functions/SaveSignature';
-import SignaturesByCompany from '@functions/SignaturesByCompany';
-import SaveSignatureText from '@functions/SaveSignatureText';
+import SignaturesByCompany from '@functions/GetSignatures';
 import { IServerlessConfig } from './config/IServerlessTypes';
-
+import UpdateSignature from '@functions/UpdateSignature';
+import DeleteSignature from '@functions/DeleteSignature';
 const config = _EnvLoader.loadEnviromentVars();
 
 const serverlessConfiguration: IServerlessConfig = {
@@ -43,12 +43,12 @@ const serverlessConfiguration: IServerlessConfig = {
                 statements: [
                     {
                         Effect: 'Allow',
-                        Action: ['s3:GetObject', 's3:PutObject'],
+                        Action: ['s3:GetObject', 's3:PutObject', 's3:DeleteObject'],
                         Resource: `${config.Serverless.SIGNATURES_BUCKET_ARN}/*`
                     },
                     {
                         Effect: 'Allow',
-                        Action: ['dynamodb:GetItem', 'dynamodb:PutItem', 'dynamodb:Query'],
+                        Action: ['dynamodb:GetItem', 'dynamodb:PutItem', 'dynamodb:Query', 'dynamodb:DeleteItem'],
                         Resource: `${config.Serverless.SIGNATURES_DATABASE_ARN}`
                     }
                 ]
@@ -57,19 +57,25 @@ const serverlessConfiguration: IServerlessConfig = {
         environment: config.Environment,
     },
     functions: { 
-        SaveSignature, 
         SignaturesByCompany, 
-        SaveSignatureText: {
-            ...SaveSignatureText,
+        SaveSignature: {
+            ...SaveSignature,
             layers: [
                 config.Serverless.CANVAS_LAYER_ARN
             ],
-        }
+        },
+        UpdateSignature: {
+            ...UpdateSignature,
+            layers: [
+                config.Serverless.CANVAS_LAYER_ARN
+            ],
+        },
+        DeleteSignature
     },
     package: { 
         individually: true,
         patterns: [
-            'src/functions/SaveSignatureText/resources/fonts/**'
+            'src/functions/_shared/resources/fonts/**'
         ]
     },
     build: {
