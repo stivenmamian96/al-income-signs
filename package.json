@@ -12,8 +12,11 @@
   "dependencies": {
     "@middy/core": "^3.4.0",
     "@middy/http-json-body-parser": "^3.4.0",
+    "@middy/validator": "^6.1.6",
+    "@types/jsonwebtoken": "^9.0.9",
     "aws-sdk": "^2.1692.0",
-    "canvas": "^3.1.0"
+    "canvas": "^3.1.0",
+    "jsonwebtoken": "^9.0.2"
   },
   "devDependencies": {
     "@serverless/typescript": "^3.0.0",

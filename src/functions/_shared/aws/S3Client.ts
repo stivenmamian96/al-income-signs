@@ -29,11 +29,25 @@ export class S3Client {
         this.s3 = s3;
     }
 
+    /**
+     * Upload a file to S3
+     * 
+     * @param params 
+     * @returns 
+     */
     public async upload(params: S3.Types.PutObjectRequest): Promise<S3.ManagedUpload.SendData>
     {
         return this.s3.upload(params).promise();   
     }
 
+    /**
+     * Get a presigned url for a file in S3
+     * 
+     * @param bucketName 
+     * @param objectKey 
+     * @param expiration 
+     * @returns 
+     */
     public async getPresignedUrl(bucketName: string, objectKey: string, expiration: number): Promise<string>
     {
         const url = await this.s3.getSignedUrlPromise('getObject', {
@@ -42,5 +56,15 @@ export class S3Client {
             Expires: expiration,
         });
         return url;
+    }
+
+    /**
+     * Delete an object from S3
+     * 
+     * @param params 
+     */
+    public async deleteObject(params: S3.DeleteObjectRequest): Promise<void>
+    {
+        await this.s3.deleteObject(params).promise();
     }
 }

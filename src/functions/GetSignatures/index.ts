@@ -5,6 +5,7 @@
  * @copyright 2024 Soluciones Alegra S.A.S
  * @license   Proprietary/Closed Source Soluciones Alegra S.A.S
  */
+
 import { handlerPath } from '@libs/handler-resolver';
 
 const isLocalServerless = process.env.LOCAL_SERVERLESS === 'true';
@@ -16,7 +17,7 @@ export default
     events: [
         {
             httpApi: {
-                method: 'post',
+                method: 'get',
                 path: '/api/v1/signature',
                 ... (!isLocalServerless && {
                     authorizer: {
@@ -24,6 +25,6 @@ export default
                     }
                 })
             },
-        }
+        },
     ],
 };

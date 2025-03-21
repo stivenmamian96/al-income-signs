@@ -7,9 +7,9 @@
  */
 
 export const AllowedImageExtensions = [
-    'image/jpeg',
-    'image/png',
-    'image/jpg'
+    'jpeg',
+    'png',
+    'jpg'
 ];
 
 export type AllowedImageExtensionsType = typeof AllowedImageExtensions[number];

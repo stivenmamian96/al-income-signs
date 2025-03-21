@@ -12,6 +12,7 @@ export default
 {
     type: "object",
     properties: {
+        signatureKey: { type: 'string' },
         signatureName: { type: 'string' },
         image: { type: 'string' },
         textConfig: { 
@@ -25,5 +26,5 @@ export default
             }
         }
     },
-    required: ['signatureName'],
+    required: ['signatureKey'],
 } as const;
