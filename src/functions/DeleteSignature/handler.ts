@@ -8,29 +8,34 @@
  */
 
 import type { ValidatedEventAPIGatewayProxyEvent } from '@libs/api-gateway';
-import { badRequestResponse, formatJSONResponse } from '@libs/api-gateway';
+import { badRequestResponse, formatObjectResponse } from '@libs/api-gateway';
 import { middyfy } from '@libs/lambda';
 import schema from './config/EndpointSchema';
 import { GetCompanyDataFromRequestUseCaseFactory } from '@functions/_shared/useCase/GetCompanyDataFromRequestUseCase/GetCompanyDataFromRequestUseCaseFactory';
+import { GetSignatureUseCaseFactory } from '@functions/_shared/useCase/GetSignatureUseCase/GetSignatureUseCaseFactory';
+import { DeleteSignatureUseCaseFactory } from '@functions/_shared/useCase/DeleteSignatureUseCase/DeleteSignatureUseCaseFactory';
 
 const DeleteSignature: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => 
 {
 
     const companyData = GetCompanyDataFromRequestUseCaseFactory.getInstance().execute(event);
     try {
+        const signature = await GetSignatureUseCaseFactory.getInstance().execute({
+            companyId: companyData.id,
+            signatureKey: event.body.signatureKey,
+            enableRetrieveUrl: false,
+            throwErrorIfNotFound: true,
+            includeDeleted: false
+        });
 
-        const signatureKey = event.body.signatureKey;
-
-        const signature = 
-
-
-        return formatJSONResponse({
-            message: 'Sign saved successfully',
-            signData
+        await DeleteSignatureUseCaseFactory.getInstance().execute(signature);
+        return formatObjectResponse({
+            message: 'Signature deleted successfully'
         });
     } catch (error) {
         return badRequestResponse(error.message);
     }
 };
 
+DeleteSignature.schema = schema;
 export const main = middyfy(DeleteSignature);

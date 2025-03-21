@@ -6,7 +6,7 @@ import SaveSignature from '@functions/SaveSignature';
 import SignaturesByCompany from '@functions/GetSignatures';
 import { IServerlessConfig } from './config/IServerlessTypes';
 import UpdateSignature from '@functions/UpdateSignature';
-
+import DeleteSignature from '@functions/DeleteSignature';
 const config = _EnvLoader.loadEnviromentVars();
 
 const serverlessConfiguration: IServerlessConfig = {
@@ -69,7 +69,8 @@ const serverlessConfiguration: IServerlessConfig = {
             layers: [
                 config.Serverless.CANVAS_LAYER_ARN
             ],
-        }
+        },
+        DeleteSignature
     },
     package: { 
         individually: true,

@@ -16,7 +16,7 @@ export default
     events: [
         {
             httpApi: {
-                method: 'post',
+                method: 'delete',
                 path: '/api/v1/signature',
                 ... (!isLocalServerless && {
                     authorizer: {
