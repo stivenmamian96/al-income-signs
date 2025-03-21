@@ -12,7 +12,7 @@ const isLocalServerless = process.env.LOCAL_SERVERLESS === 'true';
 export default 
 {
     handler: `${handlerPath(__dirname)}/handler.main`,
-    timeout: isLocalServerless ? 900 : 10,
+    timeout: 10,
     events: [
         {
             httpApi: {

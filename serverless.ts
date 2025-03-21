@@ -3,9 +3,9 @@ import { TestingConfig } from './config/TestingConfig';
 import { ProductionConfig } from './config/ProductionConfig';
 import { _EnvLoader } from './config/_EnvLoader';
 import SaveSignature from '@functions/SaveSignature';
-import SignaturesByCompany from '@functions/SignaturesByCompany';
-import SaveSignatureText from '@functions/SaveSignatureText';
+import SignaturesByCompany from '@functions/GetSignatures';
 import { IServerlessConfig } from './config/IServerlessTypes';
+import UpdateSignature from '@functions/UpdateSignature';
 
 const config = _EnvLoader.loadEnviromentVars();
 
@@ -57,10 +57,15 @@ const serverlessConfiguration: IServerlessConfig = {
         environment: config.Environment,
     },
     functions: { 
-        SaveSignature, 
         SignaturesByCompany, 
-        SaveSignatureText: {
-            ...SaveSignatureText,
+        SaveSignature: {
+            ...SaveSignature,
+            layers: [
+                config.Serverless.CANVAS_LAYER_ARN
+            ],
+        },
+        UpdateSignature: {
+            ...UpdateSignature,
             layers: [
                 config.Serverless.CANVAS_LAYER_ARN
             ],
@@ -69,7 +74,7 @@ const serverlessConfiguration: IServerlessConfig = {
     package: { 
         individually: true,
         patterns: [
-            'src/functions/SaveSignatureText/resources/fonts/**'
+            'src/functions/SaveSignature/resources/fonts/**'
         ]
     },
     build: {

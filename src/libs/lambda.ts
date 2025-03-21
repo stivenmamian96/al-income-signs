@@ -1,64 +1,73 @@
+import { _UserFriendlyError } from "@functions/_shared/errors/userFriendly/_UserFriendlyError"
 import middy from "@middy/core"
 import middyJsonBodyParser from "@middy/http-json-body-parser"
+import validator from "@middy/validator"
+import { transpileSchema } from '@middy/validator/transpile'
+/**
+ * Custom error handler for the lambda function
+ * 
+ * @returns 
+ */
+const customErrorHandler = () => ({
+	onError: async (request) => {
+		// User friendly error
+		if (request.error instanceof _UserFriendlyError) {
+			const response = {
+				statusCode: request.error.httpCode,
+				body: JSON.stringify({
+					message: request.error.message
+				}),
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			}
+			return response
+		}
 
-const CORS_HEADERS = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Credentials': true,
-  'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent',
-  'Access-Control-Allow-Methods': 'OPTIONS,GET,PUT,POST'
-}
+		// Validation schema error
+		if (request.error.message?.includes('Event object failed validation')) {
+			console.log(request.error);
+			const response = {
+				statusCode: 400,
+				body: JSON.stringify({
+					message: 'The request body is invalid, check the mandatory fields or fields types'
+				}),
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			}
+			return response
+		}
 
+		// Internal server error
+		console.log(request.error);
+		const response = {
+			statusCode: 500,
+			body: JSON.stringify({ message: 'An error occurred while processing the request' }),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		}
+		return response
+	}
+})
+
+/**
+ * Middleware for the lambda function
+ * 
+ * @param handler 
+ * @returns 
+ */
 export const middyfy = (handler) => {
-  return middy(handler)
-    .use(middyJsonBodyParser())
-    .use(withCorsSupport())
-}
-
-export const withCorsSupport = () => {
-  return {
-    before: async (request) => {
-      if (request.event.httpMethod === 'OPTIONS') {
-        return {
-          statusCode: 204,
-          headers: CORS_HEADERS,
-          body: ''
-        }
-      }
-    },
-    after: async (request) => {
-      if (!request.response) {
-        request.response = {}
-      }
-      request.response.headers = {
-        ...request.response.headers,
-        ...CORS_HEADERS
-      }
-    },
-    onError: async (request) => {
-      request.response = {
-        ...request.response,
-        headers: {
-          ...request.response?.headers,
-          ...CORS_HEADERS
-        }
-      }
-    }
-  }
-}
-
-export const withAuthValidation = () => {
-  return {
-    before: async (handler) => {
-      if (handler.event.httpMethod === 'OPTIONS') return
-      
-      const token = handler.event.headers?.authorization
-      if (!token) {
-        return {
-          statusCode: 401,
-          headers: CORS_HEADERS,
-          body: JSON.stringify({ error: 'No authorization token provided' })
-        }
-      }
-    }
-  }
+	return middy(handler)
+		.use(middyJsonBodyParser())
+		.use(validator({
+			eventSchema: transpileSchema({
+				type: "object",
+				properties: {
+					body: handler.schema
+				}
+			})
+		}))
+		.use(customErrorHandler())
 }
