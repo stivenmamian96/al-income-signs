@@ -10,6 +10,7 @@ import { DevelopmentConfig } from "./DevelopmentConfig";
 import { IEnvironmentConfig } from "./interface/IEnvironmentConfig";
 import { ProductionConfig } from "./ProductionConfig";
 import { TestingConfig } from "./TestingConfig";
+import { SandboxConfig } from "./SandboxConfig";
 
 export class _EnvLoader
 {
@@ -28,7 +29,8 @@ export class _EnvLoader
         const avaiableStages = {
             development: DevelopmentConfig,
             testing: TestingConfig,
-            production: ProductionConfig
+            production: ProductionConfig,
+            sandbox: SandboxConfig
         };
 
         let selectedStage = avaiableStages[stage] ?? null;
