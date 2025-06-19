@@ -6,6 +6,7 @@ import { AllowedImageExtensions } from "@functions/_shared/interface/AllowedImag
 import { DynamoDB, S3 } from "aws-sdk";
 import { DynamoDbClient } from "@functions/_shared/aws/DynamoDbClient";
 import { S3Client } from "@functions/_shared/aws/S3Client";
+import { GetCompanySignaturesUseCaseFactory } from "../GetCompanySignaturesUseCase/GetCompanySignaturesUseCaseFactory";
 export class SaveSignatureUseCase implements SaveSignatureUseCaseInterface
 {
     async execute(signature: ISignature): Promise<ISignature>
@@ -31,6 +32,7 @@ export class SaveSignatureUseCase implements SaveSignatureUseCaseInterface
             signature.createdAt = updatedAt;
         }
 
+        await this.validateSignature(signature);
         await this.saveOnBucket(signature);
         await this.saveOnDatabase(signature);
 
@@ -56,6 +58,39 @@ export class SaveSignatureUseCase implements SaveSignatureUseCaseInterface
         }
 
         throw new Error('There is no base64 image or text config');
+    }
+
+    /**
+     * Validate the signature before saving it
+     * 
+     * @param signature 
+     */
+    private async validateSignature(signature: ISignature): Promise<void>
+    {
+        const currentCompanySignatures = await GetCompanySignaturesUseCaseFactory.getInstance().execute({
+            companyId: signature.companyId.toString(),
+            enableRetrieveUrl: false,
+            includeDeleted: false,
+        });
+
+        let signatureAlreadyExists = false;
+        let countSignatures = 0;
+        for( const currentSignature of currentCompanySignatures) {
+            if (currentSignature.signatureName === signature.signatureName) {
+                signatureAlreadyExists = true;
+            }
+            if (currentSignature.signatureKey !== signature.signatureKey) {
+                countSignatures++;
+            }
+        }
+
+        if (countSignatures >= 4) {
+            throw new Error('There is already the maximum number of signatures');
+        }
+
+        if (signatureAlreadyExists) {
+            throw new Error('There is already a signature with the same name');
+        }
     }
 
     /**
