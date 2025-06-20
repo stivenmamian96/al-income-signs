@@ -5,16 +5,15 @@
             "type": "node",
             "request": "launch",
             "name": "Serverless offline debug",
-            "runtimeExecutable": "/opt/homebrew/bin/npx",
+            "runtimeExecutable": "/Users/stiven-alegra/.nvm/versions/node/v20.19.1/bin/nodemon",
             "runtimeArgs": [
-                "nodemon",
                 "--exec",
                 "serverless",
                 "offline",
                 "start",
                 "--stage=development"
             ],
-            "console": "integratedTerminal",
+            "console": "externalTerminal",
             "env": {
                 "NODE_ENV": "development",
                 "LOCAL_SERVERLESS": "true"
