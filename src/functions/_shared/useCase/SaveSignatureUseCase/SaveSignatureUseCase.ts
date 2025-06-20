@@ -67,6 +67,7 @@ export class SaveSignatureUseCase implements SaveSignatureUseCaseInterface
      */
     private async validateSignature(signature: ISignature): Promise<void>
     {
+        signature.signatureName = signature.signatureName.trim();
         const currentCompanySignatures = await GetCompanySignaturesUseCaseFactory.getInstance().execute({
             companyId: signature.companyId.toString(),
             enableRetrieveUrl: false,
@@ -76,10 +77,11 @@ export class SaveSignatureUseCase implements SaveSignatureUseCaseInterface
         let signatureAlreadyExists = false;
         let countSignatures = 0;
         for( const currentSignature of currentCompanySignatures) {
-            if (currentSignature.signatureName === signature.signatureName) {
+            const isNewSignature = currentSignature.signatureKey !== signature.signatureKey;
+            if (isNewSignature && currentSignature.signatureName === signature.signatureName) {
                 signatureAlreadyExists = true;
             }
-            if (currentSignature.signatureKey !== signature.signatureKey) {
+            if (!isNewSignature) {
                 countSignatures++;
             }
         }
